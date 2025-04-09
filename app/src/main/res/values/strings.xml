@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Flight Tracker</string>
+    <string name="enter_flight_number">Enter flight number (e.g., BA123)</string>
+    <string name="start_tracking">Start Tracking</string>
+    <string name="stop_tracking">Stop Tracking</string>
+    <string name="refresh_now">Refresh Now</string>
+    <string name="initial_message">Enter a flight number and press \'Start Tracking\' to begin</string>
+    <string name="no_flight_data">No flight information found for the given flight number</string>
+    <string name="loading_message">Fetching flight information...</string>
+    <string name="flight_tracker">Flight Tracker</string>
+    <string name="departure">Departure</string>
+    <string name="arrival">Arrival</string>
+    <string name="scheduled">Scheduled: %1$s</string>
+    <string name="estimated">Estimated: %1$s</string>
+    <string name="actual">Actual: %1$s</string>
+    <string name="terminal">Terminal: %1$s</string>
+    <string name="gate">Gate: %1$s</string>
+    <string name="live_flight_data">Live Flight Data</string>
+    <string name="altitude">Altitude</string>
+    <string name="speed">Speed</string>
+    <string name="direction">Direction</string>
+    <string name="last_updated">Last updated: %1$s</string>
+    <string name="api_key_missing">API key not provided. Please add your AviationStack API key.</string>
+    <string name="network_error">Network error: %1$s</string>
+    <string name="api_error">API error: %1$s</string>
+</resources>
