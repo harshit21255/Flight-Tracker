@@ -97,4 +97,21 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Room)
+    implementation ("androidx.room:room-runtime:2.6.0")
+    kapt ("androidx.room:room-compiler:2.6.0")
+    implementation ("androidx.room:room-ktx:2.6.0")
+
+// WorkManager)
+    implementation ("androidx.work:work-runtime-ktx:2.8.1")
+
+// Hilt
+    implementation ("com.google.dagger:hilt-android:2.48")
+    kapt ("com.google.dagger:hilt-compiler:2.48")
+
+// Date/Time
+    implementation ("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+
+    implementation("com.jakewharton.threetenabp:threetenabp:1.4.6")
 }

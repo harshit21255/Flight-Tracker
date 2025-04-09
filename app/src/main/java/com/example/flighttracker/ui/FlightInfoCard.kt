@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import com.example.flighttracker.model.FlightData
 
 @Composable
-fun FlightInfoCard(flightData: FlightData) {
+fun FlightInfoCard(flightData: FlightData, averageTime: String?, averageDelay: String?) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -22,12 +22,23 @@ fun FlightInfoCard(flightData: FlightData) {
             Text("Arrival: ${flightData.arrival?.airport ?: "N/A"} at ${flightData.arrival?.actual ?: "N/A"}")
 
             flightData.live?.let {
-                Text("In Air: ${if (!it.is_ground) "Yes" else "No"}")
+                Text("In Air: ${if (!it.isGround) "Yes" else "No"}")
                 Text("Latitude: ${it.latitude ?: "N/A"}")
                 Text("Longitude: ${it.longitude ?: "N/A"}")
                 Text("Altitude: ${it.altitude ?: "N/A"} m")
-                Text("Speed: ${it.speed_horizontal ?: "N/A"} km/h")
+                Text("Speed: ${it.speedHorizontal ?: "N/A"} km/h")
                 Text("Direction: ${it.direction ?: "N/A"}°")
+            }
+
+            averageTime?.let {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Average Route Time: $it",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary)
+            }
+
+            averageDelay?.let {
+                Text("Avg departure delay: $it")
             }
         }
     }
