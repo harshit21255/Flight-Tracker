@@ -1,114 +1,91 @@
-# FlightTracker - Flight Journey Tracker
+# Flight Tracker App
 
-FlightTracker is an Android application that allows users to track flights in real time. By inputting a flight number (IATA code), users can see detailed information about the flight's status, including the airline, departure and arrival airports, live location, and more. The app dynamically updates the flight information every minute to provide the latest updates.
+A Kotlin Android application that tracks flight statuses using the AviationStack API, displays real-time flight data, and calculates average flight times for selected routes.
 
 ## Features
 
-### Flight Tracking:
-- Allows users to input a flight number (IATA code) and track the status of the flight.
-- Displays details such as the airline, departure and arrival airports, flight status, and live data (location, speed, altitude).
-- Updates the flight information every minute, keeping the user informed in real time.
+- Real-time flight status tracking
+- Live flight position data (latitude, longitude, altitude)
+- Daily background data collection for selected routes
+- Average flight time calculations
+- Duplicate entry prevention
+- Modern Jetpack Compose UI
 
-### Real-Time Updates:
-- Automatically fetches flight data every minute to keep the user updated.
-- Displays live location data, including latitude, longitude, altitude, and speed.
+## File Structure
+```
+com/example/flighttracker/
+├── api/
+│ ├── AviationStackApi.kt # Retrofit API interface
+│ └── RetrofitInstance.kt # Retrofit client setup
+│
+├── data/
+│ ├── FlightHistory.kt # Room database entity
+│ ├── FlightDao.kt # Database access operations
+│ └── FlightDatabase.kt # Room database setup
+│
+├── worker/
+│ └── DataCollectionWorker.kt # Background data collection
+│
+├── viewmodel/
+│ └── FlightViewModel.kt # Business logic and state management
+│
+├── ui/
+│ ├── FlightTrackerScreen.kt # Main composable screen
+│ ├── FlightInfoCard.kt # Flight data display component
+│ └── theme/ # App theming
+│ └── Theme.kt
+│
+├── utils/
+│ ├── Constants.kt # API keys and configuration
+│ └── DateUtils.kt # Date/time utilities
+│
+└── FlightTrackerApplication.kt # App entry point
+```
 
-### Error Handling:
-- Displays clear error messages if no flight data is found, if the API call fails, or if there is a network issue.
-- Provides feedback for incorrect flight numbers and helps the user retry.
 
-### User Interface:
-- A clean and simple UI using Jetpack Compose to input the flight number and view flight details.
-- Displays flight information in a visually appealing format, using Material 3 components.
-
-### Continuous Tracking:
-- Once the flight number is entered and tracking is started, the app automatically fetches the latest flight data every minute.
-
-## Project Structure
-
-### Kotlin Files
-
-- **FlightViewModel.kt**: 
-  - Handles the logic for fetching flight data using the AviationStack API.
-  - Contains functions for tracking flights and managing errors.
-
-- **AviationStackApi.kt**: 
-  - Defines the API interface for making requests to the AviationStack API to fetch flight details based on the IATA code.
-
-- **RetrofitInstance.kt**: 
-  - Sets up the Retrofit instance to communicate with the AviationStack API.
-
-- **FlightModels.kt**: 
-  - Defines the data models that represent the flight data, including `FlightResponse`, `FlightData`, `FlightInfo`, `Airline`, `AirportInfo`, and `LiveData`.
-
-- **FlightTrackerScreen.kt**: 
-  - The main UI component that allows users to input the flight number and track the flight.
-  - Displays the flight details dynamically as the data is fetched.
-
-- **FlightInfoCard.kt**: 
-  - A composable function that renders the flight information in a card format.
-
-### Layout Files
-- **MainActivity.kt**: 
-  - The main activity that hosts the FlightTrackerScreen UI and manages interactions.
-  - Initializes the `FlightViewModel` and passes it to the composables.
-
-### Resource Files
-
-- **res/values/colors.xml**: 
-  - Defines the color scheme for the app, including primary and accent colors.
-
-- **res/values/styles.xml**: 
-  - Contains custom styles for the app, such as Material 3 button and text styling.
-
-- **res/values/strings.xml**: 
-  - Contains string resources for UI elements like labels and error messages.
-
-- **res/drawable/custom_progress_bar.xml**: 
-  - A custom drawable for any loading or progress indicators, if added in the future.
 
 ## Setup Instructions
 
-1. **Clone the Repository**:
+1. **API Key**:
+   - Get an API key from [AviationStack](https://aviationstack.com/)
+   - Add it to `utils/Constants.kt`:
+     ```kotlin
+     const val API_KEY = "your_api_key_here"
+     ```
 
-   ```bash
-   git clone https://github.com/yourusername/FlightTracker.git
-   ```
+2. **Tracked Routes**:
+   - Modify routes in `utils/Constants.kt`:
+     ```kotlin
+     val TRACKED_ROUTES = mapOf(
+         "DEL-BOM" to listOf("AI2927", "6E6318", "QP1719"),
+         "DEL-BLR" to listOf("AI2807", "6E5257", "QP1350"),
+         "BOM-BLR" to listOf("6E5388", "QP1738", "AI427")
+     )
+     ```
 
-2. **Open the Project in Android Studio**:
-   - Open Android Studio and select "Open an Existing Project."
-   - Navigate to the cloned repository and select the `FlightTracker` folder.
+### Usage
 
-3. **Build and Run the App**:
-   - Connect an Android device or start an emulator.
-   - Click on the "Run" button in Android Studio to build and run the app.
+1. **Track a Flight**
+   - Enter flight number (e.g., "AI2927")
+   - View real-time status and position
 
-## Usage
+2. **Background Data**
+   - The app automatically collects data daily
+   - Calculates average flight times for tracked routes
 
-### Start the App:
-- The app will load the main screen where you can enter a flight number (IATA code) to start tracking the flight.
 
-### Track a Flight:
-- Enter the flight number in the text field and click the "Track Flight" button.
-- The app will fetch flight details from the AviationStack API and display the airline, flight number, departure and arrival airports, and live data (latitude, longitude, altitude, speed).
+### Database Inspection
+To view collected data:
 
-### Real-Time Updates:
-- The app will automatically update the flight details every minute to keep you informed with the latest flight information.
+1. Use Android Studio's Database Inspector
 
-### Error Handling:
-- If no flight data is found or if there is an issue with the network or API, the app will display an error message.
+2. Query the flight_history table
 
-## Dependencies
-- **Jetpack Compose**: For the UI components.
-- **Retrofit**: For making network requests to the AviationStack API.
-- **Coroutines**: For background tasks to fetch flight data asynchronously.
-- **Material3**: For UI components and styling.
+3. Check for duplicates with:
+```sql
+SELECT flightNumber, date, COUNT(*) 
+FROM flight_history 
+GROUP BY flightNumber, date 
+HAVING COUNT(*) > 1
+```
 
-## Future Enhancements
-- Add a visual map to track the flight's location in real-time.
-- Improve error handling and add retry functionality.
-- Allow users to save their tracked flights for future reference.
-
----
-
-**FlightTracker** is built with Kotlin and Jetpack Compose, and uses the AviationStack API to fetch flight data. This app allows users to track flights in real-time and stay updated on their journey status. Happy flying! ✈️
